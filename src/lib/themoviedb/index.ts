@@ -55,7 +55,7 @@ export const theMovieDb = {
         }
 
         const res = await fetch(url, options).catch((error) => {
-          logger.error("Fail discovering movie details:", error)
+          logger.error(`Fail discovering movie details (id: ${id}):`, error)
           throw error
         })
 

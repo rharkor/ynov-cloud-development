@@ -1,7 +1,6 @@
 import { z } from "zod"
 
 export type ITrpcContext = {
-  session: null | undefined
   headers: { [k: string]: string } | null | undefined
   req: Request | null | undefined
 }

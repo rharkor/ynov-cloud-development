@@ -136,5 +136,8 @@ export const getRecommendedMoviesResponseSchema = z.object({
 })
 
 export const getTopRatedMoviesResponseSchema = z.object({
+  page: z.number(),
   results: moviesSchema,
+  total_pages: z.number(),
+  total_results: z.number(),
 })

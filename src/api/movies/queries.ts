@@ -3,7 +3,7 @@ import { z } from "zod"
 import { getMongoDatabase } from "@/lib/mongodb"
 import { theMovieDb } from "@/lib/themoviedb"
 import { Movies } from "@/lib/themoviedb/types"
-import { handleApiError } from "@/lib/utils/server"
+import { ApiError, handleApiError } from "@/lib/utils/server"
 import { apiInputFromSchema } from "@/types/trpc"
 
 import {
@@ -45,6 +45,9 @@ export const getMovie = async ({ input }: apiInputFromSchema<typeof getMovieSche
     const response: z.infer<typeof getMovieResponseSchema> = movieWithLikes
     return response
   } catch (error: unknown) {
+    if (error instanceof Error && error.message === "Fail discovering movie details") {
+      ApiError("Movie not found", "NOT_FOUND")
+    }
     return handleApiError(error)
   }
 }
