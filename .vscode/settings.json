@@ -1,0 +1,9 @@
+{
+  "tailwindCSS.experimental.classRegex": [
+    ["cva(?:<[^>]*>)?(([^)]*))", "[\"'`]([^\"'`]*).*?[\"'`]", "(?:twMerge|twJoin)\\(([^\\);]*)[\\);]"]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.formatOnSave": true
+}
