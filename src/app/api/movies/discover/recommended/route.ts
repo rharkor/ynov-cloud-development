@@ -18,7 +18,7 @@ import { handleNextApiError } from "@/lib/utils/server"
  *     security:
  *       - BearerAuth: []
  *     tags:
- *       - Auth
+ *       - Movies
  */
 export async function GET(req: NextRequest) {
   try {

@@ -7,11 +7,10 @@ import { apiInputFromSchema } from "@/types/trpc"
 
 import { toggleLikeResponseSchema, toggleLikeSchema } from "./schemas"
 
-export const toggleLike = async ({ input }: apiInputFromSchema<typeof toggleLikeSchema>) => {
+export const toggleLike = async ({ input, ctx: { session } }: apiInputFromSchema<typeof toggleLikeSchema>) => {
   try {
     const { id } = input
-    // TODO: Get the user id from the request
-    const userId = "65f2cf46bce655a62ccaab0c"
+    const userId = session.user.id
     await theMovieDb.methods.movie.details(id)
 
     //* Toggle the like in the mongodb database

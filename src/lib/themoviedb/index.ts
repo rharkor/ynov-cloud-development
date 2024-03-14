@@ -2,6 +2,7 @@ import fetch from "node-fetch"
 
 import { env } from "../env.mjs"
 import { logger } from "../logger"
+import { sleep } from "../utils"
 
 import { MovieDetailled, Movies, Videos } from "./types"
 
@@ -22,9 +23,8 @@ const handleApiResponse = async (res: fetch.Response, errorMessage: string) => {
 export const theMovieDb = {
   methods: {
     discover: {
-      movie: async () => {
-        const url =
-          "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"
+      movie: async (params: { page: number }) => {
+        const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${params.page}`
         const options = {
           method: "GET",
           headers: {
@@ -102,7 +102,7 @@ export const theMovieDb = {
         return json as Movies
       },
       topRated: async () => {
-        const url = `https://api.themoviedb.org/3/movie/top_rated`
+        const url = `https://api.themoviedb.org/3/movie/popular`
         const options = {
           method: "GET",
           headers: {
@@ -117,6 +117,25 @@ export const theMovieDb = {
         })
 
         const json = await handleApiResponse(res, "Fail discovering top rated movies")
+        return json as Movies
+      },
+      popular: async (params: { page: number }) => {
+        const url = `https://api.themoviedb.org/3/movie/popular?page=${params.page}`
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: "Bearer " + env.THEMOVIEDB_API_TOKEN,
+          },
+        }
+
+        const res = await fetch(url, options).catch((error) => {
+          logger.error("Fail discovering popular movies:", error)
+          throw error
+        })
+
+        const json = (await handleApiResponse(res, "Fail discovering popular movies")) as Movies
+        await sleep(2500)
         return json as Movies
       },
     },

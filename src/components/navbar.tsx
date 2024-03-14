@@ -1,38 +1,51 @@
 "use client"
 
-import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { LogOut } from "lucide-react"
 
 import useAuth from "@/contexts/auth/utils"
-import { Navbar as ONavbar, NavbarContent, NavbarItem } from "@nextui-org/react"
+import { Button, Link, Navbar as ONavbar, NavbarContent, NavbarItem } from "@nextui-org/react"
 
 export default function Navbar() {
-  const { user } = useAuth()
-  console.log("🚀 ~ Navbar ~ user:", user)
+  const { user, logout } = useAuth()
+  const pathname = usePathname()
 
   return (
-    <ONavbar>
+    <ONavbar shouldHideOnScroll>
+      <NavbarContent>Hello, {user?.user.name}</NavbarContent>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
+        <NavbarLink href="/" isActive={pathname === "/"}>
+          Home
+        </NavbarLink>
+        <NavbarLink href="/liked" isActive={pathname === "/liked"}>
+          Liked
+        </NavbarLink>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Log out</Link>
+          <Button color="danger" variant="flat" className="flex flex-row gap-2" onPress={logout}>
+            <LogOut className="size-3" />
+            Log out
+          </Button>
         </NavbarItem>
       </NavbarContent>
     </ONavbar>
+  )
+}
+
+function NavbarLink({
+  isActive,
+  children,
+  ...props
+}: {
+  isActive: boolean
+  children: React.ReactNode
+} & React.ComponentProps<typeof Link>) {
+  return (
+    <NavbarItem isActive={isActive}>
+      <Link color={isActive ? undefined : "foreground"} aria-current={isActive ? "page" : undefined} {...props}>
+        {children}
+      </Link>
+    </NavbarItem>
   )
 }

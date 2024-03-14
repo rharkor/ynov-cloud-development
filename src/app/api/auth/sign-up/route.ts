@@ -21,7 +21,8 @@ import { handleNextApiError } from "@/lib/utils/server"
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/SignUp'
- *
+ *     tags:
+ *       - Auth
  */
 export async function POST(req: NextRequest) {
   try {

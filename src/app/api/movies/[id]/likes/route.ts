@@ -23,6 +23,10 @@ import { handleNextApiError } from "@/lib/utils/server"
  *           type: string
  *         description: Movie id
  *         required: true
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - Movies
  */
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -62,7 +66,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
  *     security:
  *       - BearerAuth: []
  *     tags:
- *       - Auth
+ *       - Movies
  */
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {

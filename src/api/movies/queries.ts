@@ -15,14 +15,17 @@ import {
   getMoviesSchema,
   getMovieVideosResponseSchema,
   getMovieVideosSchema,
+  getPopularMoviesResponseSchema,
+  getPopularMoviesSchema,
   getRecommendedMoviesResponseSchema,
-  getTopRatedMoviesResponseSchema,
 } from "./schemas"
 
 export const getMovies = async ({ input }: apiInputFromSchema<typeof getMoviesSchema>) => {
   try {
-    const { search } = input
-    const movies = search ? await theMovieDb.methods.search.movie(search) : await theMovieDb.methods.discover.movie()
+    const { search, cursor } = input
+    const movies = search
+      ? await theMovieDb.methods.search.movie(search)
+      : await theMovieDb.methods.discover.movie({ page: cursor ?? 1 })
     const response: z.infer<typeof getMoviesResponseSchema> = movies
     return response
   } catch (error: unknown) {
@@ -74,10 +77,9 @@ export const getMovieVideos = async ({ input }: apiInputFromSchema<typeof getMov
   }
 }
 
-export const getRecommendedMovies = async () => {
+export const getRecommendedMovies = async ({ ctx: { session } }: apiInputFromSchema<typeof undefined>) => {
   try {
-    // TODO get the user id from the request
-    const userId = "0"
+    const userId = session.user.id
     const likedMovies = await prisma.like.findMany({
       where: { userId },
       take: 10,
@@ -94,10 +96,7 @@ export const getRecommendedMovies = async () => {
     }
 
     // Flatten/Shuffle the array
-    const randomRecommendation = recommendedMovies
-      .flat()
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 10)
+    const randomRecommendation = recommendedMovies.flat().sort(() => 0.5 - Math.random())
 
     const response: z.infer<typeof getRecommendedMoviesResponseSchema> = {
       results: randomRecommendation,
@@ -108,10 +107,11 @@ export const getRecommendedMovies = async () => {
   }
 }
 
-export const getTopRatedMovies = async () => {
+export const getPopularMovies = async ({ input }: apiInputFromSchema<typeof getPopularMoviesSchema>) => {
   try {
-    const movies = await theMovieDb.methods.discover.movie()
-    const response: z.infer<typeof getTopRatedMoviesResponseSchema> = movies
+    const { cursor } = input
+    const movies = await theMovieDb.methods.movie.popular({ page: cursor ?? 1 })
+    const response: z.infer<typeof getPopularMoviesResponseSchema> = movies
     return response
   } catch (error: unknown) {
     return handleApiError(error)

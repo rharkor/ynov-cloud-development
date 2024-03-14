@@ -22,10 +22,16 @@ import { handleNextApiError } from "@/lib/utils/server"
  *           type: string
  *         description: Search movies
  *         required: false
+ *       - in: query
+ *         name: cursor
+ *         schema:
+ *           type: number
+ *         description: Page number
+ *         required: false
  *     security:
  *       - BearerAuth: []
  *     tags:
- *       - Auth
+ *       - Movies
  */
 export async function GET(req: NextRequest) {
   try {

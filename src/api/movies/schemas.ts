@@ -2,9 +2,10 @@ import { z } from "zod"
 
 export const getMoviesSchema = z.object({
   search: z.string().optional().nullable(),
+  cursor: z.number().optional().nullable(),
 })
 
-const moviesSchema = z.array(
+export const moviesSchema = z.array(
   z.object({
     adult: z.boolean(),
     backdrop_path: z.string().nullable(),
@@ -130,7 +131,11 @@ export const getRecommendedMoviesResponseSchema = z.object({
   results: moviesSchema,
 })
 
-export const getTopRatedMoviesResponseSchema = z.object({
+export const getPopularMoviesSchema = z.object({
+  cursor: z.number().optional().nullable(),
+})
+
+export const getPopularMoviesResponseSchema = z.object({
   page: z.number(),
   results: moviesSchema,
   total_pages: z.number(),

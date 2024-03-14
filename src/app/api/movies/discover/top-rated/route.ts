@@ -14,15 +14,22 @@ import { handleNextApiError } from "@/lib/utils/server"
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GetTopRatedMoviesResponse'
+ *               $ref: '#/components/schemas/GetPopularMoviesResponse'
+ *     parameters:
+ *       - in: query
+ *         name: cursor
+ *         schema:
+ *           type: number
+ *         description: Page number
+ *         required: false
  *     security:
  *       - BearerAuth: []
  *     tags:
- *       - Auth
+ *       - Movies
  */
 export async function GET(req: NextRequest) {
   try {
-    const res = await appRouter.movies.getTopRatedMovies({
+    const res = await appRouter.movies.getPopularMovies({
       ctx: { req },
       path: "",
       rawInput: {},

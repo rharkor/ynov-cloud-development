@@ -5,8 +5,8 @@ import {
   GetMovieLikesResponse,
   GetMovieResponse,
   GetMoviesResponse,
+  GetPopularMoviesResponse,
   GetRecommendedMoviesResponse,
-  GetTopRatedMoviesResponse,
   ToggleLikeResponse,
 } from "./schemas/movies"
 
@@ -35,7 +35,7 @@ export const getApiDocs = async () => {
           ToggleLikeResponse,
           GetMovieLikesResponse,
           GetRecommendedMoviesResponse,
-          GetTopRatedMoviesResponse,
+          GetPopularMoviesResponse,
           SignUp,
           SignUpResponse,
           SignIn,
@@ -43,11 +43,6 @@ export const getApiDocs = async () => {
           SignOutResponse,
         },
       },
-      security: [
-        {
-          BearerAuth: [],
-        },
-      ],
     },
   })
   return spec

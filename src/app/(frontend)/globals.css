@@ -12,3 +12,7 @@
   --toastify-color-progress-error: hsl(var(--nextui-danger));
   --toastify-icon-color-error: hsl(var(--nextui-danger));
 }
+
+.invisible-scrollbar::-webkit-scrollbar {
+  display: none;
+}

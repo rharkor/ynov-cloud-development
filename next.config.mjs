@@ -26,6 +26,14 @@ const nextConfig = {
       },
     ]
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "image.tmdb.org",
+        protocol: "https",
+      },
+    ],
+  },
 }
 const withBundleAnalyzer = bunldeAnalyzer({
   enabled: process.env.ANALYZE === "true",

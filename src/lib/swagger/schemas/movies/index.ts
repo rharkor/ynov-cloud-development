@@ -155,7 +155,7 @@ export const GetRecommendedMoviesResponse = {
   },
 }
 
-export const GetTopRatedMoviesResponse = {
+export const GetPopularMoviesResponse = {
   type: "object",
   properties: {
     page: { type: "number" },
