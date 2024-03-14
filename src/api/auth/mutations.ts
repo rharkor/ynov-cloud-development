@@ -12,7 +12,7 @@ import { apiInputFromSchema } from "@/types/trpc"
 
 import { signInResponseSchema, signInSchema, signUpResponseSchema, signUpSchema } from "./schemas"
 
-export const signIn = async ({ input }: apiInputFromSchema<typeof signInSchema>) => {
+export const signIn = async ({ input }: apiInputFromSchema<typeof signInSchema, false>) => {
   try {
     const { email, password } = input
     const user = await prisma.user.findUnique({
@@ -47,7 +47,7 @@ export const signIn = async ({ input }: apiInputFromSchema<typeof signInSchema>)
   }
 }
 
-export const signUp = async ({ input }: apiInputFromSchema<typeof signUpSchema>) => {
+export const signUp = async ({ input }: apiInputFromSchema<typeof signUpSchema, false>) => {
   try {
     const { email, password: _password, name } = input
     const user = await prisma.user.findFirst({ where: { email } })

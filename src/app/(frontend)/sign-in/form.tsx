@@ -29,7 +29,14 @@ export default function SignInForm() {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-      <FormField form={form} name="email" type="email" label="Email Address" placeholder="Enter your email address" />
+      <FormField
+        form={form}
+        name="email"
+        type="email"
+        label="Email Address"
+        placeholder="Enter your email address"
+        autoComplete="username"
+      />
       <FormField
         form={form}
         name="password"

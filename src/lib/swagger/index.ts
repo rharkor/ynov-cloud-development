@@ -24,6 +24,8 @@ export const getApiDocs = async () => {
             type: "http",
             scheme: "bearer",
             bearerFormat: "JWT",
+            description:
+              "JWT Token (please note that if you are already logged in, the token will be automatically added to the requests in cookies)",
           },
         },
         schemas: {
@@ -35,7 +37,11 @@ export const getApiDocs = async () => {
           GetTopRatedMoviesResponse,
         },
       },
-      security: [],
+      security: [
+        {
+          BearerAuth: [],
+        },
+      ],
     },
   })
   return spec
