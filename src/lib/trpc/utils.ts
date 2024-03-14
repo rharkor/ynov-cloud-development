@@ -1,3 +1,5 @@
+import { env } from "../env.mjs"
+
 export const TRPC_ERROR_CODES_BY_KEY = {
   /**
    * Invalid JSON was received by the server.
@@ -26,3 +28,7 @@ export const TRPC_ERROR_CODES_BY_KEY = {
   TOO_MANY_REQUESTS: 429,
   CLIENT_CLOSED_REQUEST: 499,
 } as const
+
+export const getUrl = () => {
+  return env.NEXT_PUBLIC_BASE_URL + "/api/trpc"
+}

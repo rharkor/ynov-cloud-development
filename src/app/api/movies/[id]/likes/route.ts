@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { toggleLike } from "@/api/movies/mutations"
-import { getMovieLikes } from "@/api/movies/queries"
-import {
-  getMovieLikesResponseSchema,
-  getMovieLikesSchema,
-  toggleLikeResponseSchema,
-  toggleLikeSchema,
-} from "@/api/movies/schemas"
+import { appRouter } from "@/api/_app"
+import { getMovieLikesResponseSchema, toggleLikeResponseSchema } from "@/api/movies/schemas"
 import { handleNextApiError } from "@/lib/utils/server"
 
 /**
@@ -32,14 +26,13 @@ import { handleNextApiError } from "@/lib/utils/server"
  */
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // TODO: Implement
-    const userId = 0
     const rawInput = params
-    const input = toggleLikeSchema.parse({
-      id: parseInt(rawInput.id, 10),
-      userId,
+    const res = await appRouter.movies.toggleLike({
+      ctx: { req },
+      path: "",
+      rawInput: { id: parseInt(rawInput.id) },
+      type: "mutation",
     })
-    const res = await toggleLike({ ctx: { headers: undefined, req: undefined }, input })
     const output = toggleLikeResponseSchema.parse(res)
     return NextResponse.json(output)
   } catch (error: unknown) {
@@ -70,10 +63,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const rawInput = params
-    const input = getMovieLikesSchema.parse({
-      id: parseInt(rawInput.id, 10),
+    const res = await appRouter.movies.getMovieLikes({
+      ctx: { req },
+      path: "",
+      rawInput: { id: parseInt(rawInput.id) },
+      type: "query",
     })
-    const res = await getMovieLikes({ ctx: { headers: undefined, req: undefined }, input })
     const output = getMovieLikesResponseSchema.parse(res)
     return NextResponse.json(output)
   } catch (error: unknown) {

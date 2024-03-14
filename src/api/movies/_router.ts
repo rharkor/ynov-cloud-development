@@ -12,7 +12,6 @@ import {
   getMovieVideosResponseSchema,
   getMovieVideosSchema,
   getRecommendedMoviesResponseSchema,
-  getRecommendedMoviesSchema,
   getTopRatedMoviesResponseSchema,
   toggleLikeResponseSchema,
   toggleLikeSchema,
@@ -27,9 +26,6 @@ export const moviesRouter = router({
     .input(getMovieVideosSchema)
     .output(getMovieVideosResponseSchema)
     .query(getMovieVideos),
-  getRecommendedMovies: publicProcedure
-    .input(getRecommendedMoviesSchema)
-    .output(getRecommendedMoviesResponseSchema)
-    .query(getRecommendedMovies),
+  getRecommendedMovies: publicProcedure.output(getRecommendedMoviesResponseSchema).query(getRecommendedMovies),
   getTopRatedMovies: publicProcedure.output(getTopRatedMoviesResponseSchema).query(getTopRatedMovies),
 })

@@ -15,18 +15,22 @@ export const env = createEnv({
       .optional()
       .transform((value) => value === "true"),
     ENV: z.enum(["development", "staging", "preproduction", "production"]),
-    MONGODB_URI: z.string().min(1),
+    DATABASE_URL: z.string().min(1),
     THEMOVIEDB_API_TOKEN: z.string().min(1),
-    DB_NAME: z.string().min(1),
+    PASSWORD_HASHER_SECRET: z.string().min(1),
+    JWT_SECRET: z.string().min(1),
   },
   client: {
+    NEXT_PUBLIC_BASE_URL: z.string().min(1),
   },
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
     ENV: process.env.ENV,
-    MONGODB_URI: process.env.MONGODB_URI,
+    DATABASE_URL: process.env.DATABASE_URL,
     THEMOVIEDB_API_TOKEN: process.env.THEMOVIEDB_API_TOKEN,
-    DB_NAME: process.env.DB_NAME,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    PASSWORD_HASHER_SECRET: process.env.PASSWORD_HASHER_SECRET,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
   onValidationError: (error) => {
     logger.error(error)

@@ -52,17 +52,6 @@ export default function TrpcProvider({ children }: { children: React.ReactNode }
             (process.env.NODE_ENV === "development" && typeof window !== "undefined") ||
             (opts.direction === "down" && opts.result instanceof Error),
         }),
-        // splitLink({
-        //   condition(op) {
-        //     return op.type === "subscription"
-        //   },
-        //   true: wsLink({
-        //     client: wsClient,
-        //   }),
-        //   false: httpBatchLink({
-        //     url: getUrl(),
-        //   }),
-        // }),
         httpBatchLink({
           url: getUrl(),
         }),

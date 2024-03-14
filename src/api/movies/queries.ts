@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getMongoDatabase } from "@/lib/mongodb"
+import { prisma } from "@/lib/prisma"
 import { theMovieDb } from "@/lib/themoviedb"
 import { Movies } from "@/lib/themoviedb/types"
 import { ApiError, handleApiError } from "@/lib/utils/server"
@@ -16,7 +16,6 @@ import {
   getMovieVideosResponseSchema,
   getMovieVideosSchema,
   getRecommendedMoviesResponseSchema,
-  getRecommendedMoviesSchema,
   getTopRatedMoviesResponseSchema,
 } from "./schemas"
 
@@ -37,9 +36,7 @@ export const getMovie = async ({ input }: apiInputFromSchema<typeof getMovieSche
     const movie = await theMovieDb.methods.movie.details(id)
 
     // Add likes to the response
-    const db = await getMongoDatabase()
-    const likes = db.collection("likes")
-    const count = await likes.countDocuments({ movieId: id })
+    const count = await prisma.like.count({ where: { movieId: id } })
     const movieWithLikes = { ...movie, likes: count }
 
     const response: z.infer<typeof getMovieResponseSchema> = movieWithLikes
@@ -55,9 +52,7 @@ export const getMovie = async ({ input }: apiInputFromSchema<typeof getMovieSche
 export const getMovieLikes = async ({ input }: apiInputFromSchema<typeof getMovieLikesSchema>) => {
   try {
     const { id } = input
-    const db = await getMongoDatabase()
-    const likes = db.collection("likes")
-    const count = await likes.countDocuments({ movieId: id })
+    const count = await prisma.like.count({ where: { movieId: id } })
     const response: z.infer<typeof getMovieLikesResponseSchema> = {
       id: input.id,
       likes: count,
@@ -79,20 +74,14 @@ export const getMovieVideos = async ({ input }: apiInputFromSchema<typeof getMov
   }
 }
 
-export const getRecommendedMovies = async ({ input }: apiInputFromSchema<typeof getRecommendedMoviesSchema>) => {
+export const getRecommendedMovies = async () => {
   try {
-    const { userId } = input
-    const db = await getMongoDatabase()
-    const likes = db.collection("likes")
-    const likedMovies = await likes
-      .find(
-        { userId },
-        {
-          limit: 10,
-          sort: { _id: -1 },
-        }
-      )
-      .toArray()
+    // TODO get the user id from the request
+    const userId = "0"
+    const likedMovies = await prisma.like.findMany({
+      where: { userId },
+      take: 10,
+    })
     const likedMoviesIds = likedMovies.map((movie) => movie.movieId)
     // Three random liked movies
     const randomLikedMoviesId = likedMoviesIds.sort(() => 0.5 - Math.random()).slice(0, 3)

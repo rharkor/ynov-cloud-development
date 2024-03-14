@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { getMongoDatabase } from "@/lib/mongodb"
+import { prisma } from "@/lib/prisma"
 import { theMovieDb } from "@/lib/themoviedb"
 import { handleApiError } from "@/lib/utils/server"
 import { apiInputFromSchema } from "@/types/trpc"
@@ -9,19 +9,30 @@ import { toggleLikeResponseSchema, toggleLikeSchema } from "./schemas"
 
 export const toggleLike = async ({ input }: apiInputFromSchema<typeof toggleLikeSchema>) => {
   try {
-    const { id, userId } = input
+    const { id } = input
+    // TODO: Get the user id from the request
+    const userId = "65f2cf46bce655a62ccaab0c"
     await theMovieDb.methods.movie.details(id)
 
     //* Toggle the like in the mongodb database
-    const db = await getMongoDatabase()
-    // Collection name: likes
-    const likes = db.collection("likes")
     // Check if the user has already liked the movie
-    const existingLike = await likes.findOne({ movieId: id, userId })
+    const existingLike = await prisma.like.findFirst({ where: { movieId: id, userId } })
     if (existingLike) {
-      await likes.deleteOne({ movieId: id, userId })
+      await prisma.like.delete({
+        where: {
+          movieId_userId: {
+            movieId: id,
+            userId,
+          },
+        },
+      })
     } else {
-      await likes.insertOne({ movieId: id, userId })
+      await prisma.like.create({
+        data: {
+          movieId: id,
+          userId,
+        },
+      })
     }
 
     const response: z.infer<typeof toggleLikeResponseSchema> = {

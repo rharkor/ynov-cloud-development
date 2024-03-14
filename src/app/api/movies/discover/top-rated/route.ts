@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-import { getTopRatedMovies } from "@/api/movies/queries"
+import { appRouter } from "@/api/_app"
 import { getTopRatedMoviesResponseSchema } from "@/api/movies/schemas"
 import { handleNextApiError } from "@/lib/utils/server"
 
@@ -17,9 +17,14 @@ import { handleNextApiError } from "@/lib/utils/server"
  *             schema:
  *               $ref: '#/components/schemas/GetTopRatedMoviesResponse'
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const res = await getTopRatedMovies()
+    const res = await appRouter.movies.getTopRatedMovies({
+      ctx: { req },
+      path: "",
+      rawInput: {},
+      type: "query",
+    })
     const output = getTopRatedMoviesResponseSchema.parse(res)
     return NextResponse.json(output)
   } catch (error: unknown) {

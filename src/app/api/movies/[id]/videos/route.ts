@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { getMovieVideos } from "@/api/movies/queries"
-import { getMovieVideosResponseSchema, getMovieVideosSchema } from "@/api/movies/schemas"
+import { appRouter } from "@/api/_app"
+import { getMovieVideosResponseSchema } from "@/api/movies/schemas"
 import { handleNextApiError } from "@/lib/utils/server"
 
 /**
@@ -27,10 +27,12 @@ import { handleNextApiError } from "@/lib/utils/server"
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const rawInput = params
-    const input = getMovieVideosSchema.parse({
-      id: parseInt(rawInput.id, 10),
+    const res = await appRouter.movies.getMovieVideos({
+      ctx: { req },
+      path: "",
+      rawInput: { id: parseInt(rawInput.id) },
+      type: "query",
     })
-    const res = await getMovieVideos({ ctx: { headers: undefined, req: undefined }, input })
     const output = getMovieVideosResponseSchema.parse(res)
     return NextResponse.json(output)
   } catch (error: unknown) {

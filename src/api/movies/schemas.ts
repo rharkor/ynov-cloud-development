@@ -88,7 +88,6 @@ export const getMovieResponseSchema = z.object({
 
 export const toggleLikeSchema = z.object({
   id: z.number(),
-  userId: z.number(), // TODO Use session.userId instead
 })
 
 export const toggleLikeResponseSchema = z.object({
@@ -125,10 +124,6 @@ export const getMovieVideosResponseSchema = z.object({
       id: z.string(),
     })
   ),
-})
-
-export const getRecommendedMoviesSchema = z.object({
-  userId: z.number(), // TODO Use session.userId instead
 })
 
 export const getRecommendedMoviesResponseSchema = z.object({
