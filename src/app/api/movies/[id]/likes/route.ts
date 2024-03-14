@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { appRouter } from "@/api/_app"
-import { getMovieLikesResponseSchema, toggleLikeResponseSchema } from "@/api/movies/schemas"
+import { toggleLikeResponseSchema } from "@/api/movies/schemas"
 import { handleNextApiError } from "@/lib/utils/server"
 
 /**
@@ -59,6 +59,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
  *           type: string
  *         description: Movie id
  *         required: true
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - Auth
  */
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -69,8 +73,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       rawInput: { id: parseInt(rawInput.id) },
       type: "query",
     })
-    const output = getMovieLikesResponseSchema.parse(res)
-    return NextResponse.json(output)
+    return NextResponse.json(res)
   } catch (error: unknown) {
     return handleNextApiError(error)
   }

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { appRouter } from "@/api/_app"
-import { getMoviesResponseSchema } from "@/api/movies/schemas"
 import { handleNextApiError } from "@/lib/utils/server"
 
 /**
@@ -23,6 +22,10 @@ import { handleNextApiError } from "@/lib/utils/server"
  *           type: string
  *         description: Search movies
  *         required: false
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - Auth
  */
 export async function GET(req: NextRequest) {
   try {
@@ -33,8 +36,7 @@ export async function GET(req: NextRequest) {
       rawInput: { search: rawInput.get("search") },
       type: "query",
     })
-    const output = getMoviesResponseSchema.parse(res)
-    return NextResponse.json(output)
+    return NextResponse.json(res)
   } catch (error: unknown) {
     return handleNextApiError(error)
   }

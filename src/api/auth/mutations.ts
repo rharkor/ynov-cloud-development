@@ -1,13 +1,10 @@
-import jws from "jws"
 import { z } from "zod"
 
-import { hashingAlgorithm } from "@/lib/auth"
+import { createToken } from "@/lib/auth"
 import { bcryptCompare, hash } from "@/lib/bcrypt"
 import { authTokenExpiration } from "@/lib/constants"
-import { env } from "@/lib/env.mjs"
 import { prisma } from "@/lib/prisma"
 import { ApiError, handleApiError } from "@/lib/utils/server"
-import { TTokenPayload } from "@/types/auth"
 import { apiInputFromSchema } from "@/types/trpc"
 
 import { signInResponseSchema, signInSchema, signUpResponseSchema, signUpSchema } from "./schemas"
@@ -28,15 +25,11 @@ export const signIn = async ({ input }: apiInputFromSchema<typeof signInSchema, 
       ApiError("Invalid credentials")
     }
 
-    const payload: TTokenPayload = {
+    const payload = {
       user: { email, id: user.id, name: user.name },
       exp: Date.now() + authTokenExpiration,
     }
-    const token = jws.sign({
-      header: { alg: hashingAlgorithm },
-      payload,
-      secret: env.JWT_SECRET,
-    })
+    const token = await createToken(payload)
 
     const response: z.infer<typeof signInResponseSchema> = {
       token,
@@ -64,17 +57,22 @@ export const signUp = async ({ input }: apiInputFromSchema<typeof signUpSchema, 
       },
     })
 
-    const payload: TTokenPayload = { user: { email, name, id: newUser.id }, exp: Date.now() + authTokenExpiration }
-    const token = jws.sign({
-      header: { alg: hashingAlgorithm },
-      payload,
-      secret: env.JWT_SECRET,
-    })
+    const payload = { user: { email, name, id: newUser.id }, exp: Date.now() + authTokenExpiration }
+    const token = await createToken(payload)
 
     const response: z.infer<typeof signUpResponseSchema> = {
       token,
     }
     return response
+  } catch (error: unknown) {
+    return handleApiError(error)
+  }
+}
+
+export const signOut = async ({ ctx: { session } }: apiInputFromSchema<typeof undefined, true>) => {
+  try {
+    await prisma.session.delete({ where: { id: session.sid } })
+    return { success: true }
   } catch (error: unknown) {
     return handleApiError(error)
   }

@@ -48,7 +48,7 @@ const isAuthenticated = middleware(async (opts) => {
     ApiError("unauthorized", "UNAUTHORIZED")
   }
 
-  const isValid = verifyToken(token)
+  const isValid = await verifyToken(token)
   if (!isValid) {
     ApiError("unauthorized", "UNAUTHORIZED")
   }

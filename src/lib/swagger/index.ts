@@ -1,5 +1,6 @@
 import { createSwaggerSpec } from "next-swagger-doc"
 
+import { SignIn, SignInResponse, SignOutResponse, SignUp, SignUpResponse } from "./schemas/auth"
 import {
   GetMovieLikesResponse,
   GetMovieResponse,
@@ -35,6 +36,11 @@ export const getApiDocs = async () => {
           GetMovieLikesResponse,
           GetRecommendedMoviesResponse,
           GetTopRatedMoviesResponse,
+          SignUp,
+          SignUpResponse,
+          SignIn,
+          SignInResponse,
+          SignOutResponse,
         },
       },
       security: [

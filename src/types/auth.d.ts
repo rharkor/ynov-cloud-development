@@ -5,4 +5,5 @@ export type TTokenPayload = {
     name: string
   }
   exp: number
+  sid: string
 }

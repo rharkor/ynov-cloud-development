@@ -9,9 +9,15 @@ import { TTokenPayload } from "@/types/auth"
 
 import { AuthContext, TAuthContext } from "./context"
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+  ssUser,
+}: {
+  children: React.ReactNode
+  ssUser: TAuthContext["user"]
+}) {
   const router = useRouter()
-  const [user, setUser] = useState<TAuthContext["user"]>(null)
+  const [user, setUser] = useState<TAuthContext["user"]>(ssUser)
   const [userState, setUserState] = useState<TAuthContext["userState"]>("loading")
 
   useEffect(() => {

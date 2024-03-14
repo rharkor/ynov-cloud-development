@@ -18,3 +18,7 @@ export const signUpSchema = z.object({
 export const signUpResponseSchema = z.object({
   token: z.string(),
 })
+
+export const signOutResponseSchema = z.object({
+  success: z.boolean(),
+})
