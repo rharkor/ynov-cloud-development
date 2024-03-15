@@ -11,7 +11,9 @@ export default function ClientProtect() {
   const router = useRouter()
 
   useEffect(() => {
-    if (userState !== "loading" && userState !== "connected") router.push(authRoutes.redirectOnUnhauthorized)
+    if (userState !== "loading" && userState !== "connected") {
+      router.push(authRoutes.redirectOnUnhauthorized)
+    }
   }, [userState, router])
 
   return null

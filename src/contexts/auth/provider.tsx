@@ -18,7 +18,7 @@ export default function AuthProvider({
 }) {
   const router = useRouter()
   const [user, setUser] = useState<TAuthContext["user"]>(ssUser)
-  const [userState, setUserState] = useState<TAuthContext["userState"]>("loading")
+  const [userState, setUserState] = useState<TAuthContext["userState"]>(ssUser ? "connected" : "loading")
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -27,17 +27,20 @@ export default function AuthProvider({
       .split(";")
       .find((c) => c.trim().startsWith("token="))
       ?.split("=")[1]
+
     if (!token) {
       setUserState("disconnected")
       return
     }
 
     const decoded = jws.decode(token)
+
     if (!decoded) {
       setUserState("disconnected")
       return
     }
     const payload = JSON.parse(decoded.payload) as TTokenPayload
+
     setUser(payload)
     setUserState("connected")
   }, [])

@@ -11,14 +11,16 @@ import UIProvider from "./ui-provider"
 import "react-toastify/dist/ReactToastify.css"
 
 export default function RootProviders({ children }: { children: React.ReactNode }) {
-  const cookiesStore = cookies()
-  const token = cookiesStore.get("token")
   let ssUser: TTokenPayload | null = null
-  if (token && token.value) {
-    const decoded = jws.decode(token.value)
-    const payload = JSON.parse(decoded.payload) as TTokenPayload
-    ssUser = payload
-  }
+  try {
+    const cookiesStore = cookies()
+    const token = cookiesStore.get("token")
+    if (token && token.value) {
+      const decoded = jws.decode(token.value)
+      const payload = JSON.parse(decoded.payload) as TTokenPayload
+      ssUser = payload
+    }
+  } catch (error) {}
 
   return (
     <TrpcProvider>
