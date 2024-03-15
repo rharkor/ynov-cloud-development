@@ -16,3 +16,7 @@
 .invisible-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.never-empty:empty:after {
+  content: "\200b";
+}

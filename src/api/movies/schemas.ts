@@ -37,6 +37,7 @@ export const getMovieSchema = z.object({
 
 export const getMovieResponseSchema = z.object({
   likes: z.number(),
+  isLiked: z.boolean(),
   adult: z.boolean(),
   backdrop_path: z.string().nullable(),
   belongs_to_collection: z.unknown(),
@@ -136,6 +137,17 @@ export const getPopularMoviesSchema = z.object({
 })
 
 export const getPopularMoviesResponseSchema = z.object({
+  page: z.number(),
+  results: moviesSchema,
+  total_pages: z.number(),
+  total_results: z.number(),
+})
+
+export const getRecommendedMoviesForMovieSchema = z.object({
+  id: z.number(),
+})
+
+export const getRecommendedMoviesForMovieResponseSchema = z.object({
   page: z.number(),
   results: moviesSchema,
   total_pages: z.number(),

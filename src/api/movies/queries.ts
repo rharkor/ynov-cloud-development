@@ -17,6 +17,8 @@ import {
   getMovieVideosSchema,
   getPopularMoviesResponseSchema,
   getPopularMoviesSchema,
+  getRecommendedMoviesForMovieResponseSchema,
+  getRecommendedMoviesForMovieSchema,
   getRecommendedMoviesResponseSchema,
 } from "./schemas"
 
@@ -33,14 +35,17 @@ export const getMovies = async ({ input }: apiInputFromSchema<typeof getMoviesSc
   }
 }
 
-export const getMovie = async ({ input }: apiInputFromSchema<typeof getMovieSchema>) => {
+export const getMovie = async ({ input, ctx: { session } }: apiInputFromSchema<typeof getMovieSchema>) => {
   try {
     const { id } = input
     const movie = await theMovieDb.methods.movie.details(id)
 
     // Add likes to the response
     const count = await prisma.like.count({ where: { movieId: id } })
-    const movieWithLikes = { ...movie, likes: count }
+    const isLiked = await prisma.like.findFirst({
+      where: { movieId: id, userId: session.user.id },
+    })
+    const movieWithLikes = { ...movie, likes: count, isLiked: !!isLiked }
 
     const response: z.infer<typeof getMovieResponseSchema> = movieWithLikes
     return response
@@ -112,6 +117,18 @@ export const getPopularMovies = async ({ input }: apiInputFromSchema<typeof getP
     const { cursor } = input
     const movies = await theMovieDb.methods.movie.popular({ page: cursor ?? 1 })
     const response: z.infer<typeof getPopularMoviesResponseSchema> = movies
+    return response
+  } catch (error: unknown) {
+    return handleApiError(error)
+  }
+}
+
+export const getRecommendedMoviesForMovie = async ({
+  input,
+}: apiInputFromSchema<typeof getRecommendedMoviesForMovieSchema>) => {
+  try {
+    const recommended = await theMovieDb.methods.movie.recommendations(input.id)
+    const response: z.infer<typeof getRecommendedMoviesForMovieResponseSchema> = recommended
     return response
   } catch (error: unknown) {
     return handleApiError(error)

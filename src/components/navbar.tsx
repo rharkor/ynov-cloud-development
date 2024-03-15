@@ -11,7 +11,12 @@ export default function Navbar() {
   const pathname = usePathname()
 
   return (
-    <ONavbar shouldHideOnScroll>
+    <ONavbar
+      shouldHideOnScroll
+      classNames={{
+        wrapper: "!container",
+      }}
+    >
       <NavbarContent>Hello, {user?.user.name}</NavbarContent>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <NavbarLink href="/" isActive={pathname === "/"}>
