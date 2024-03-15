@@ -102,7 +102,7 @@ export default function PopularMovies() {
           <ChevronLeft className="size-6" />
         </Button>
         <ScrollContainer
-          className="invisible-scrollbar flex w-full cursor-pointer flex-row gap-2 overflow-auto scroll-smooth"
+          className="invisible-scrollbar relative z-0 flex w-full cursor-pointer flex-row gap-2 overflow-auto scroll-smooth"
           innerRef={scrollContainerRef}
         >
           {[

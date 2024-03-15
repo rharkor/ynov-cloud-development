@@ -11,9 +11,10 @@
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "analyze": "ANALYZE=true npm run build && cd .next/analyze && npx -y serve",
-    "test": "jest --watchAll",
+    "test": "jest && cross-env NO_REPORT=true npx -y playwright test",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:e2e": "npx -y playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -29,6 +30,7 @@
     "@typescript-eslint/parser": "^7.1.1",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.0",
+    "cross-env": "^7.0.3",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "eslint-config-prettier": "^9.1.0",
@@ -58,6 +60,7 @@
     "@babel/preset-env": "^7.24.0",
     "@babel/preset-typescript": "^7.23.3",
     "@jest/globals": "^29.7.0",
+    "@playwright/test": "^1.42.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@types/bcryptjs": "^2.4.6",
