@@ -2,7 +2,6 @@ import fetch from "node-fetch"
 
 import { env } from "../env.mjs"
 import { logger } from "../logger"
-import { sleep } from "../utils"
 
 import { MovieDetailled, Movies, Videos } from "./types"
 
@@ -135,7 +134,6 @@ export const theMovieDb = {
         })
 
         const json = (await handleApiResponse(res, "Fail discovering popular movies")) as Movies
-        await sleep(2500)
         return json as Movies
       },
     },

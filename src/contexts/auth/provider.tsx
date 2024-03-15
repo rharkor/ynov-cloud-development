@@ -57,7 +57,9 @@ export default function AuthProvider({
     router.push("/")
   }
 
-  const logout: TAuthContext["logout"] = () => {
+  const logoutMutation = trpc.auth.signOut.useMutation()
+  const logout: TAuthContext["logout"] = async () => {
+    await logoutMutation.mutateAsync()
     // Remove the token from cookies
     if (typeof window !== "undefined") {
       document.cookie = "token=; path=/;"
