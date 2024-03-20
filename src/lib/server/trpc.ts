@@ -36,6 +36,11 @@ export const middleware = t.middleware
 export const publicProcedure = t.procedure
 
 const isAuthenticated = middleware(async (opts) => {
+  if (opts.ctx.isServer) {
+    return opts.next({
+      ctx: opts.ctx,
+    })
+  }
   // const { session } = await getAuthApi()
   const cookies = opts.ctx.req?.headers.get("cookie")
   const tokenCookie = cookies
