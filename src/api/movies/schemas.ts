@@ -15,7 +15,7 @@ export const moviesSchema = z.array(
     original_title: z.string(),
     overview: z.string(),
     popularity: z.number(),
-    poster_path: z.string(),
+    poster_path: z.string().nullable(),
     release_date: z.string(),
     title: z.string(),
     video: z.boolean(),

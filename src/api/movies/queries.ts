@@ -28,6 +28,7 @@ export const getMovies = async ({ input }: apiInputFromSchema<typeof getMoviesSc
     const movies = search
       ? await theMovieDb.methods.search.movie(search)
       : await theMovieDb.methods.discover.movie({ page: cursor ?? 1 })
+
     const response: z.infer<typeof getMoviesResponseSchema> = movies
     return response
   } catch (error: unknown) {
