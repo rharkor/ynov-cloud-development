@@ -29,6 +29,7 @@ import {
   getRecommendedMoviesForMovieResponseSchema,
   getRecommendedMoviesForMovieSchema,
   getRecommendedMoviesResponseSchema,
+  getRecommendedMoviesSchema,
   toggleLikeResponseSchema,
   toggleLikeSchema,
 } from "./schemas"
@@ -45,7 +46,10 @@ export const moviesRouter = router({
     .input(getMovieVideosSchema)
     .output(getMovieVideosResponseSchema)
     .query(getMovieVideos),
-  getRecommendedMovies: authenticatedProcedure.output(getRecommendedMoviesResponseSchema).query(getRecommendedMovies),
+  getRecommendedMovies: authenticatedProcedure
+    .input(getRecommendedMoviesSchema)
+    .output(getRecommendedMoviesResponseSchema)
+    .query(getRecommendedMovies),
   getPopularMovies: authenticatedProcedure
     .input(getPopularMoviesSchema)
     .output(getPopularMoviesResponseSchema)

@@ -128,6 +128,10 @@ export const getMovieVideosResponseSchema = z.object({
   ),
 })
 
+export const getRecommendedMoviesSchema = z.object({
+  userId: z.string(),
+})
+
 export const getRecommendedMoviesResponseSchema = z.object({
   results: moviesSchema,
 })

@@ -56,7 +56,9 @@ export default function LikedMovies() {
       </header>
       <div className="relative flex min-h-[160px] w-full flex-row flex-wrap justify-center overflow-auto">
         {items && !hasItems ? (
-          <p className="Top-1/2 absolute top-1/2 -translate-x-1/2 -translate-y-1/2 text-default-500">No liked movies</p>
+          <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-default-500">
+            No liked movies
+          </p>
         ) : (
           items.map((page, i) => (
             <React.Fragment key={i}>
