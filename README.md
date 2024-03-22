@@ -6,13 +6,19 @@
 npm install
 ```
 
-2. Run the server
+2. Copy the `.env.example` file to `.env` and fill in the environment variables
 
 ```bash
-npm start
+cp .env.example .env
 ```
 
-3. Open the browser and navigate to `http://localhost:3000`
+3. Run the server
+
+```bash
+npm run dev
+```
+
+4. Open the browser and navigate to `http://localhost:3000`
 
 ## Stack
 
@@ -29,3 +35,4 @@ npm start
 - Trpc (RPC)
 - Prisma (ORM)
 - MongoDB (Database)
+- T3 env (Environment variables validation)
