@@ -60,10 +60,12 @@ export default function MovieHeader({ movie }: { movie: z.infer<typeof getMovieR
                 "rounded-medium": !movie,
               })}
             >
-              <h1 className={cn("never-empty text-7xl font-bold", fontMono.className)}>{movie?.title}</h1>
+              <h1 className={cn("never-empty text-3xl font-bold !leading-[normal] lg:text-7xl", fontMono.className)}>
+                {movie?.title}
+              </h1>
             </Skeleton>
             <div className="flex flex-row items-center gap-2">
-              <p className="never-empty text-lg text-default-500">
+              <p className="never-empty w-max text-lg text-default-500">
                 <span className="font-bold">{movie?.likes ?? 0}</span> like{(movie?.likes ?? 0) > 1 ? "s" : ""}
               </p>
               <Button

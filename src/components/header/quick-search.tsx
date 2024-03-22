@@ -5,6 +5,8 @@ import { Search } from "lucide-react"
 
 import { Button, Input, Kbd, Modal, ModalContent, Spinner, useDisclosure } from "@nextui-org/react"
 
+import DateInput from "../easter-egg/date"
+
 import { SearchResult } from "./search-result"
 import useSearchQuery from "./use-search-query"
 import useSearchResults from "./use-search-results"
@@ -55,8 +57,10 @@ export default function QuickSearch() {
 
   const elements = useSearchResults({ data: searchQuery?.data, onClose })
 
+  const { isOpen: isEasterEggOpen, onOpen: onEasterEggOpen, onOpenChange: onEasterEggChange } = useDisclosure()
   const handleEasterEgg = () => {
     console.log("🐰")
+    onEasterEggOpen()
   }
 
   return (
@@ -105,6 +109,7 @@ export default function QuickSearch() {
                   handleEasterEgg()
                 }
               }}
+              className="text-muted-foreground focus:ring-primary-foreground/50s mx-2 w-max cursor-pointer self-end text-right text-sm hover:text-primary-foreground focus:outline-none focus:ring-2"
             >
               Don&apos;t know what to watch?
             </p>
@@ -116,6 +121,7 @@ export default function QuickSearch() {
           </div>
         </ModalContent>
       </Modal>
+      <DateInput isOpen={isEasterEggOpen} onOpenChange={onEasterEggChange} />
     </>
   )
 }

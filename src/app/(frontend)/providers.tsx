@@ -6,6 +6,7 @@ import AuthProvider from "@/contexts/auth/provider"
 import TrpcProvider from "@/lib/trpc/provider"
 import { TTokenPayload } from "@/types/auth"
 
+import GeigerProvider from "./geiger"
 import UIProvider from "./ui-provider"
 
 import "react-toastify/dist/ReactToastify.css"
@@ -23,11 +24,13 @@ export default function RootProviders({ children }: { children: React.ReactNode 
   } catch (error) {}
 
   return (
-    <TrpcProvider>
-      <UIProvider>
-        <AuthProvider ssUser={ssUser}>{children}</AuthProvider>
-      </UIProvider>
-      <ToastContainer theme="dark" />
-    </TrpcProvider>
+    <GeigerProvider>
+      <TrpcProvider>
+        <UIProvider>
+          <AuthProvider ssUser={ssUser}>{children}</AuthProvider>
+        </UIProvider>
+        <ToastContainer theme="dark" />
+      </TrpcProvider>
+    </GeigerProvider>
   )
 }

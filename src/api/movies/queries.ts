@@ -17,6 +17,7 @@ import {
   getMovieVideosSchema,
   getPopularMoviesResponseSchema,
   getPopularMoviesSchema,
+  getRandomMovieResponseSchema,
   getRecommendedMoviesForMovieResponseSchema,
   getRecommendedMoviesForMovieSchema,
   getRecommendedMoviesResponseSchema,
@@ -130,6 +131,29 @@ export const getRecommendedMoviesForMovie = async ({
   try {
     const recommended = await theMovieDb.methods.movie.recommendations(input.id)
     const response: z.infer<typeof getRecommendedMoviesForMovieResponseSchema> = recommended
+    return response
+  } catch (error: unknown) {
+    return handleApiError(error)
+  }
+}
+
+export const getRandomMovie = async ({ ctx: { session } }: apiInputFromSchema<typeof undefined>) => {
+  try {
+    const userId = session.user.id
+    const likedMovies = await prisma.like.findMany({
+      where: { userId },
+      take: 10,
+    })
+    const likedMoviesIds = likedMovies.map((movie) => movie.movieId)
+    const randomLikedMovieId = likedMoviesIds[Math.floor(Math.random() * likedMoviesIds.length)]
+
+    const recommended = await theMovieDb.methods.movie.recommendations(randomLikedMovieId)
+    const randomMovie = recommended.results[Math.floor(Math.random() * recommended.results.length)]
+
+    const response: z.infer<typeof getRandomMovieResponseSchema> = {
+      result: randomMovie,
+      others: recommended.results.filter((movie) => movie.id !== randomMovie.id),
+    }
     return response
   } catch (error: unknown) {
     return handleApiError(error)

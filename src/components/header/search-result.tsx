@@ -18,11 +18,13 @@ export function SearchResult({ title, poster_path, overview, onClick }: TItem) {
     >
       {poster_path && (
         <div className="shrink-0 overflow-hidden rounded-medium">
-          <Image src={getImageUrl(poster_path, "w500")} width={65} height={100} alt={title} />
+          <Image src={getImageUrl(poster_path, "w500")} width={65} className="h-auto" height={100} alt={title} />
         </div>
       )}
       <div className="flex h-max flex-col justify-start">
-        <p className="text-start text-lg font-bold text-default-900 group-hover:text-foreground">{title}</p>
+        <p className="max-w-[400px] truncate text-start text-lg font-bold text-default-900 group-hover:text-foreground">
+          {title}
+        </p>
         <p
           className={cn(
             "mt-1 max-h-16 w-full truncate whitespace-normal text-start text-sm text-foreground-600 group-hover:text-foreground"

@@ -7,6 +7,7 @@ import {
   getMovies,
   getMovieVideos,
   getPopularMovies,
+  getRandomMovie,
   getRecommendedMovies,
   getRecommendedMoviesForMovie,
 } from "./queries"
@@ -21,6 +22,7 @@ import {
   getMovieVideosSchema,
   getPopularMoviesResponseSchema,
   getPopularMoviesSchema,
+  getRandomMovieResponseSchema,
   getRecommendedMoviesForMovieResponseSchema,
   getRecommendedMoviesForMovieSchema,
   getRecommendedMoviesResponseSchema,
@@ -49,4 +51,5 @@ export const moviesRouter = router({
     .input(getRecommendedMoviesForMovieSchema)
     .output(getRecommendedMoviesForMovieResponseSchema)
     .query(getRecommendedMoviesForMovie),
+  getRandomMovie: authenticatedProcedure.output(getRandomMovieResponseSchema).query(getRandomMovie),
 })
