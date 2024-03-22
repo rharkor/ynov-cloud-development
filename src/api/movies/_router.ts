@@ -2,6 +2,7 @@ import { authenticatedProcedure, router } from "@/lib/server/trpc"
 
 import { toggleLike } from "./mutations"
 import {
+  getLikedMovies,
   getMovie,
   getMovieLikes,
   getMovies,
@@ -12,6 +13,8 @@ import {
   getRecommendedMoviesForMovie,
 } from "./queries"
 import {
+  getLikedMoviesResponseSchema,
+  getLikedMoviesSchema,
   getMovieLikesResponseSchema,
   getMovieLikesSchema,
   getMovieResponseSchema,
@@ -52,4 +55,8 @@ export const moviesRouter = router({
     .output(getRecommendedMoviesForMovieResponseSchema)
     .query(getRecommendedMoviesForMovie),
   getRandomMovie: authenticatedProcedure.output(getRandomMovieResponseSchema).query(getRandomMovie),
+  getLikedMovies: authenticatedProcedure
+    .input(getLikedMoviesSchema)
+    .output(getLikedMoviesResponseSchema)
+    .query(getLikedMovies),
 })

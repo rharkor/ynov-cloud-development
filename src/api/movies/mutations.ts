@@ -26,9 +26,12 @@ export const toggleLike = async ({ input, ctx: { session } }: apiInputFromSchema
         },
       })
     } else {
+      const movie = await theMovieDb.methods.movie.details(id)
       await prisma.like.create({
         data: {
           movieId: id,
+          movieTitle: movie.title,
+          posterPath: movie.poster_path,
           userId,
         },
       })

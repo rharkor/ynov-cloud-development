@@ -158,3 +158,20 @@ export const getRandomMovieResponseSchema = z.object({
   result: movieSchema,
   others: z.array(movieSchema),
 })
+
+export const getLikedMoviesSchema = z.object({
+  cursor: z.number().optional().nullable(),
+})
+
+export const getLikedMoviesResponseSchema = z.object({
+  page: z.number(),
+  results: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      poster_path: z.string().optional().nullable(),
+    })
+  ),
+  total_pages: z.number(),
+  total_results: z.number(),
+})

@@ -7,6 +7,8 @@ import { ApiError, handleApiError } from "@/lib/utils/server"
 import { apiInputFromSchema } from "@/types/trpc"
 
 import {
+  getLikedMoviesResponseSchema,
+  getLikedMoviesSchema,
   getMovieLikesResponseSchema,
   getMovieLikesSchema,
   getMovieResponseSchema,
@@ -153,6 +155,32 @@ export const getRandomMovie = async ({ ctx: { session } }: apiInputFromSchema<ty
     const response: z.infer<typeof getRandomMovieResponseSchema> = {
       result: randomMovie,
       others: recommended.results.filter((movie) => movie.id !== randomMovie.id),
+    }
+    return response
+  } catch (error: unknown) {
+    return handleApiError(error)
+  }
+}
+
+export const getLikedMovies = async ({ ctx: { session }, input }: apiInputFromSchema<typeof getLikedMoviesSchema>) => {
+  try {
+    const { cursor } = input
+    const take = 20
+    const userId = session.user.id
+    const likedMovies = await prisma.like.findMany({
+      where: { userId },
+      take,
+      skip: ((cursor ?? 1) - 1) * take,
+    })
+    const response: z.infer<typeof getLikedMoviesResponseSchema> = {
+      results: likedMovies.map((movie) => ({
+        id: movie.movieId,
+        title: movie.movieTitle,
+        poster_path: movie.posterPath,
+      })),
+      page: cursor ?? 1,
+      total_pages: Math.ceil(likedMovies.length / take),
+      total_results: likedMovies.length,
     }
     return response
   } catch (error: unknown) {
