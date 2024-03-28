@@ -9,9 +9,21 @@ commands:
       - checkout
       - node/install-packages:
           pkg-manager: npm
+      - run:
+          name: Setup env files
+          command: |
+            echo "ENV=${ENV}" > .env
+            echo "DATABASE_URL=${DATABASE_URL}" >> .env
+            echo "THEMOVIEDB_API_TOKEN=${THEMOVIEDB_API_TOKEN}" >> .env
+            echo "NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" >> .env
+            echo "PASSWORD_HASHER_SECRET=${PASSWORD_HASHER_SECRET}" >> .env
+            echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
 jobs:
   init:
+    context:
+      - dev_cloud-dev
+      - main_cloud-dev
     executor: node/default
     steps:
       - init-node
@@ -27,6 +39,12 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
+          name: Lint
+          command: npm run lint
+      - run:
+          name: Format
+          command: npm run prettier
+      - run:
           name: Build
           command: npm run build
       - persist_to_workspace:
@@ -40,9 +58,17 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      # Tests unitaires et d'intégration
       - run:
           name: Run tests
           command: npm run test:ci
+      # TODO
+      # Tests de régression
+      # Tests de performance
+      # Tests de sécurité
+      # Tests de compatibilité
+      # Tests d'accessibilité
+
       - store_test_results:
           path: ./test-results/
   deploy-dev:
@@ -71,7 +97,7 @@ workflows:
             - init
       - test-node:
           requires:
-            - init
+            - build-node
       - deploy-dev:
           requires:
             - test-node

@@ -6,11 +6,11 @@ export type ITrpcContext<ISLoggedIn extends boolean | undefined = undefined> = {
   headers: { [k: string]: string } | null | undefined
   req: Request | null | undefined
   session: ISLoggedIn extends undefined
-  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  any
-  : ISLoggedIn extends true
-  ? TTokenPayload
-  : null | undefined
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any
+    : ISLoggedIn extends true
+      ? TTokenPayload
+      : null | undefined
   isServer?: boolean
 }
 
