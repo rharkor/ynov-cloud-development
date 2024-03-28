@@ -19,15 +19,20 @@ commands:
             echo "PASSWORD_HASHER_SECRET=${PASSWORD_HASHER_SECRET}" >> .env
             echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
+init-job: &init-job
+  executor: node/default
+  steps:
+    - init-node
+    - persist_to_workspace:
+        root: ~/project
+        paths:
+          - .
+
 jobs:
-  init:
-    executor: node/default
-    steps:
-      - init-node
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
+  init--dev:
+    <<: *init-job
+  init--prod:
+    <<: *init-job
   build-node:
     executor: node/default
     environment:
@@ -88,22 +93,36 @@ prod_only: &prod_only
       only:
         - main
 
+dev_flow: &dev_flow
+  - init--dev:
+      <<: *dev_only
+      context: dev_cloud-dev
+  - build-node--dev:
+      requires:
+        - init--dev
+  - test-node--dev:
+      requires:
+        - build-node--dev
+  - deploy--dev:
+      requires:
+        - test-node--dev
+
+prod_flow: &prod_flow
+  - init--prod:
+      <<: *prod_only
+      context: dev_cloud-prod
+  - build-node--prod:
+      requires:
+        - init--prod
+  - test-node--prod:
+      requires:
+        - build-node--prod
+  - deploy--prod:
+      requires:
+        - test-node--prod
+
 workflows:
   build-test-deploy:
     jobs:
-      - init:
-          <<: *dev_only
-          context: dev_cloud-dev
-      - init:
-          <<: *prod_only
-          context: prod_cloud-dev
-      - build-node:
-          requires:
-            - init
-      - test-node:
-          requires:
-            - build-node
-      - deploy:
-          requires:
-            - test-node
-            - build-node
+      <<: *dev_flow
+      <<: *prod_flow
