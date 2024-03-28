@@ -1,0 +1,130 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.2
+
+commands:
+  init-node:
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Setup env files
+          command: |
+            echo "ENV=${ENV}" > .env
+            echo "DATABASE_URL=${DATABASE_URL}" >> .env
+            echo "THEMOVIEDB_API_TOKEN=${THEMOVIEDB_API_TOKEN}" >> .env
+            echo "NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" >> .env
+            echo "PASSWORD_HASHER_SECRET=${PASSWORD_HASHER_SECRET}" >> .env
+            echo "JWT_SECRET=${JWT_SECRET}" >> .env
+
+init-job: &init-job
+  executor: node/default
+  steps:
+    - init-node
+    - persist_to_workspace:
+        root: ~/project
+        paths:
+          - .
+
+jobs:
+  init--dev:
+    <<: *init-job
+  init--prod:
+    <<: *init-job
+  build-node:
+    executor: node/default
+    environment:
+      NODE_ENV: production
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Lint
+          command: npm run lint
+      - run:
+          name: Format
+          command: npm run prettier
+      - run:
+          name: Build
+          command: npm run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  test-node:
+    executor: node/default
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+    steps:
+      - attach_workspace:
+          at: ~/project
+      # Tests unitaires et d'intégration
+      - run:
+          name: Run tests
+          command: npm run test:ci
+      # TODO
+      # Tests de régression
+      # Tests de performance
+      # Tests de sécurité
+      # Tests de compatibilité
+      # Tests d'accessibilité
+
+      - store_test_results:
+          path: ./test-results/
+  deploy:
+    executor: node/default
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Deploy to dev
+          command: echo "Deploying"
+
+dev_only: &dev_only
+  filters:
+    branches:
+      only:
+        - dev
+prod_only: &prod_only
+  filters:
+    branches:
+      only:
+        - main
+
+dev_flow: &dev_flow
+  jobs:
+    - init--dev:
+        <<: *dev_only
+        context: dev_cloud-dev
+    - build-node:
+        requires:
+          - init--dev
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
+
+prod_flow: &prod_flow
+  jobs:
+    - init--prod:
+        <<: *prod_only
+        context: dev_cloud-prod
+    - build-node:
+        requires:
+          - init--prod
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
+
+workflows:
+  build-test-deploy--dev:
+    <<: *dev_flow
+  build-test-deploy--prod:
+    <<: *prod_flow

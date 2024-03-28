@@ -12,6 +12,7 @@
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "analyze": "ANALYZE=true npm run build && cd .next/analyze && npx -y serve",
     "test": "jest && cross-env NO_REPORT=true npx -y playwright test",
+    "test:ci": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "npx -y playwright test"
