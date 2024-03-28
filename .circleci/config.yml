@@ -9,8 +9,6 @@ commands:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-          environment:
-            NODE_ENV: production
 
 jobs:
   init:
