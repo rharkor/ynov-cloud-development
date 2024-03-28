@@ -29,9 +29,7 @@ init-job: &init-job
           - .
 
 jobs:
-  init--dev:
-    <<: *init-job
-  init--prod:
+  init:
     <<: *init-job
   build-node:
     executor: node/default
