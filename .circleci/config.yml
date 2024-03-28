@@ -86,40 +86,40 @@ jobs:
           command: echo "Deploying to prod"
 
 workflows:
-  build-and-test:
+  build-test-deploy--dev:
+    filters:
+      branches:
+        only:
+          - dev
     jobs:
-      - init-dev:
+      - init:
           context: dev_cloud-dev
-          filters:
-            branches:
-              only:
-                - dev
-      - init-prod:
-          context: main_cloud-dev
-          filters:
-            branches:
-              only:
-                - main
       - build-node:
           requires:
-            - init-dev
-            - init-prod
+            - init
       - test-node:
           requires:
             - build-node
-      - deploy-dev:
+      - deploy:
           requires:
             - test-node
             - build-node
-          filters:
-            branches:
-              only:
-                - dev
-      - deploy-prod:
+
+  build-test-deploy--prod:
+    filters:
+      branches:
+        only:
+          - main
+    jobs:
+      - init:
+          context: main_cloud-dev
+      - build-node:
+          requires:
+            - init
+      - test-node:
+          requires:
+            - build-node
+      - deploy:
           requires:
             - test-node
             - build-node
-          filters:
-            branches:
-              only:
-                - main
