@@ -4,10 +4,8 @@ orbs:
   node: circleci/node@5.2
 
 jobs:
-  test-node:
+  init-node:
     executor: node/default
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
       - checkout
       - node/install-packages:
@@ -15,13 +13,58 @@ jobs:
       - run:
           name: Copy .env.example to .env
           command: cp .env.example .env
+  build-node:
+    executor: node/default
+    steps:
+      - run:
+          name: Build
+          command: npm run build
+  test-node:
+    executor: node/default
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+    steps:
       - run:
           name: Run tests
           command: npm run test:ci
       - store_test_results:
           path: ./test-results/
+  deploy-dev:
+    executor: node/default
+    steps:
+      - run:
+          name: Deploy to dev
+          command: echo "Deploying to dev"
+  deploy-prod:
+    executor: node/default
+    steps:
+      - run:
+          name: Deploy to prod
+          command: echo "Deploying to prod"
 
 workflows:
   build-and-test:
     jobs:
-      - test-node
+      - init-node
+      - build-node:
+          requires:
+            - init-node
+      - test-node:
+          requires:
+            - init-node
+      - deploy-dev:
+          requires:
+            - test-node
+            - build-node
+          filters:
+            branches:
+              only:
+                - dev
+      - deploy-prod:
+          requires:
+            - test-node
+            - build-node
+          filters:
+            branches:
+              only:
+                - main
