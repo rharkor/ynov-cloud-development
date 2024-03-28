@@ -108,10 +108,10 @@ workflows:
             branches:
               only:
                 - main
-
       - build-node:
           requires:
-            - init
+            - init-dev
+            - init-prod
       - test-node:
           requires:
             - build-node
