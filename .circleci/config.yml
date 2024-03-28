@@ -3,9 +3,8 @@ version: 2.1
 orbs:
   node: circleci/node@5.2
 
-jobs:
+commands:
   init-node:
-    executor: node/default
     steps:
       - checkout
       - node/install-packages:
@@ -13,6 +12,8 @@ jobs:
       - run:
           name: Copy .env.example to .env
           command: cp .env.example .env
+
+jobs:
   build-node:
     executor: node/default
     steps:
