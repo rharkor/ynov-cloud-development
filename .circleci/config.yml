@@ -80,7 +80,13 @@ jobs:
           at: ~/project
       - run:
           name: Deploy to dev
+          # TODO
           command: echo "Deploying"
+      # TODO
+      # Tests de vérification
+      # Tests de validation fonctionnelle
+      # Tests de charge
+      # Surveillance et suivi
 
 dev_only: &dev_only
   filters:
