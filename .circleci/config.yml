@@ -16,16 +16,20 @@ jobs:
   build-node:
     executor: node/default
     steps:
-      - checkout
+      - init-node
       - run:
           name: Build
           command: npm run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
   test-node:
     executor: node/default
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
-      - checkout
+      - init-node
       - run:
           name: Run tests
           command: npm run test:ci
@@ -34,12 +38,16 @@ jobs:
   deploy-dev:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Deploy to dev
           command: echo "Deploying to dev"
   deploy-prod:
     executor: node/default
     steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Deploy to prod
           command: echo "Deploying to prod"
@@ -47,13 +55,8 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - init-node
-      - build-node:
-          requires:
-            - init-node
-      - test-node:
-          requires:
-            - init-node
+      - build-node
+      - test-node
       - deploy-dev:
           requires:
             - test-node
