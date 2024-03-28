@@ -29,7 +29,9 @@ init-job: &init-job
           - .
 
 jobs:
-  init:
+  init--dev:
+    <<: *init-job
+  init--prod:
     <<: *init-job
   build-node:
     executor: node/default
@@ -97,19 +99,38 @@ prod_only: &prod_only
       only:
         - main
 
+dev_flow: &dev_flow
+  jobs:
+    - init--dev:
+        <<: *dev_only
+        context: dev_cloud-dev
+    - build-node:
+        requires:
+          - init--dev
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
+
+prod_flow: &prod_flow
+  jobs:
+    - init--prod:
+        <<: *prod_only
+        context: main_cloud-dev
+    - build-node:
+        requires:
+          - init--prod
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
+
 workflows:
-  build-test-deploy:
-    jobs:
-      - init:
-          context:
-            - dev_cloud-dev
-            - main_cloud-dev
-      - build-node:
-          requires:
-            - init
-      - test-node:
-          requires:
-            - build-node
-      - deploy:
-          requires:
-            - test-node
+  build-test-deploy--dev:
+    <<: *dev_flow
+  build-test-deploy--prod:
+    <<: *prod_flow
