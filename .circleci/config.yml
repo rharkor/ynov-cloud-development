@@ -68,22 +68,14 @@ jobs:
 
       - store_test_results:
           path: ./test-results/
-  deploy-dev:
+  deploy:
     executor: node/default
     steps:
       - attach_workspace:
           at: ~/project
       - run:
           name: Deploy to dev
-          command: echo "Deploying to dev"
-  deploy-prod:
-    executor: node/default
-    steps:
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Deploy to prod
-          command: echo "Deploying to prod"
+          command: echo "Deploying"
 
 workflows:
   build-test-deploy--dev:
