@@ -14,10 +14,19 @@ commands:
           command: cp .env.example .env
 
 jobs:
-  build-node:
+  init:
     executor: node/default
     steps:
       - init-node
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  build-node:
+    executor: node/default
+    steps:
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Build
           command: npm run build
@@ -30,7 +39,8 @@ jobs:
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
-      - init-node
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Run tests
           command: npm run test:ci
@@ -56,8 +66,13 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - build-node
-      - test-node
+      - init
+      - build-node:
+          requires:
+            - init
+      - test-node:
+          requires:
+            - init
       - deploy-dev:
           requires:
             - test-node
