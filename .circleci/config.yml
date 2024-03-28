@@ -94,35 +94,37 @@ prod_only: &prod_only
         - main
 
 dev_flow: &dev_flow
-  - init--dev:
-      <<: *dev_only
-      context: dev_cloud-dev
-  - build-node--dev:
-      requires:
-        - init--dev
-  - test-node--dev:
-      requires:
-        - build-node--dev
-  - deploy--dev:
-      requires:
-        - test-node--dev
+  jobs:
+    - init--dev:
+        <<: *dev_only
+        context: dev_cloud-dev
+    - build-node--dev:
+        requires:
+          - init--dev
+    - test-node--dev:
+        requires:
+          - build-node--dev
+    - deploy--dev:
+        requires:
+          - test-node--dev
 
 prod_flow: &prod_flow
-  - init--prod:
-      <<: *prod_only
-      context: dev_cloud-prod
-  - build-node--prod:
-      requires:
-        - init--prod
-  - test-node--prod:
-      requires:
-        - build-node--prod
-  - deploy--prod:
-      requires:
-        - test-node--prod
+  jobs:
+    - init--prod:
+        <<: *prod_only
+        context: dev_cloud-prod
+    - build-node--prod:
+        requires:
+          - init--prod
+    - test-node--prod:
+        requires:
+          - build-node--prod
+    - deploy--prod:
+        requires:
+          - test-node--prod
 
 workflows:
-  build-test-deploy:
-    jobs:
-      <<: *dev_flow
-      <<: *prod_flow
+  build-test-deploy--dev:
+    <<: *dev_flow
+  build-test-deploy--prod:
+    <<: *prod_flow
