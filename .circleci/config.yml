@@ -3,13 +3,19 @@ version: 2.1
 orbs:
   node: circleci/node@5.2
 
+jobs:
+  setup-env:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - run:
+          name: Copy .env.example to .env
+          command: cp .env.example .env
+
 workflows:
   test:
     jobs:
-      - run:
-          name: Setup dotenv
-          command: |
-            cp .env.example .env
+      - setup-env
       - node/test:
           version: "20.0"
           pkg-manager: npm
