@@ -98,30 +98,30 @@ dev_flow: &dev_flow
     - init--dev:
         <<: *dev_only
         context: dev_cloud-dev
-    - build-node--dev:
+    - build-node:
         requires:
           - init--dev
-    - test-node--dev:
+    - test-node:
         requires:
-          - build-node--dev
+          - build-node
     - deploy--dev:
         requires:
-          - test-node--dev
+          - test-node
 
 prod_flow: &prod_flow
   jobs:
     - init--prod:
         <<: *prod_only
         context: dev_cloud-prod
-    - build-node--prod:
+    - build-node:
         requires:
           - init--prod
-    - test-node--prod:
+    - test-node:
         requires:
-          - build-node--prod
-    - deploy--prod:
+          - build-node
+    - deploy:
         requires:
-          - test-node--prod
+          - test-node
 
 workflows:
   build-test-deploy--dev:
