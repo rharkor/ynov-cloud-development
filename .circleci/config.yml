@@ -82,6 +82,11 @@ dev_only: &dev_only
     branches:
       only:
         - dev
+prod_only: &prod_only
+  filters:
+    branches:
+      only:
+        - main
 
 workflows:
   build-test-deploy:
@@ -89,6 +94,9 @@ workflows:
       - init:
           <<: *dev_only
           context: dev_cloud-dev
+      - init:
+          <<: *prod_only
+          context: prod_cloud-dev
       - build-node:
           requires:
             - init
