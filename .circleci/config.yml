@@ -86,16 +86,16 @@ dev_only: &dev_only
 workflows:
   build-test-deploy:
     jobs:
-      - init--dev:
+      - init:
           <<: *dev_only
           context: dev_cloud-dev
-      - build-node--dev:
+      - build-node:
           requires:
-            - init--dev
-      - test-node--dev:
+            - init
+      - test-node:
           requires:
-            - build-node--dev
-      - deploy--dev:
+            - build-node
+      - deploy:
           requires:
-            - test-node--dev
-            - build-node--dev
+            - test-node
+            - build-node
