@@ -77,41 +77,25 @@ jobs:
           name: Deploy to dev
           command: echo "Deploying"
 
-workflows:
-  build-test-deploy--dev:
-    filters:
-      branches:
-        only:
-          - dev
-    jobs:
-      - init:
-          context: dev_cloud-dev
-      - build-node:
-          requires:
-            - init
-      - test-node:
-          requires:
-            - build-node
-      - deploy:
-          requires:
-            - test-node
-            - build-node
+dev_only: &dev_only
+  filters:
+    branches:
+      only:
+        - dev
 
-  build-test-deploy--prod:
-    filters:
-      branches:
-        only:
-          - main
+workflows:
+  build-test-deploy:
     jobs:
-      - init:
-          context: main_cloud-dev
-      - build-node:
+      - init--dev:
+          <<: *dev_only
+          context: dev_cloud-dev
+      - build-node--dev:
           requires:
-            - init
-      - test-node:
+            - init--dev
+      - test-node--dev:
           requires:
-            - build-node
-      - deploy:
+            - build-node--dev
+      - deploy--dev:
           requires:
-            - test-node
-            - build-node
+            - test-node--dev
+            - build-node--dev
