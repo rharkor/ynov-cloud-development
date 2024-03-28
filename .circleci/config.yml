@@ -20,9 +20,18 @@ commands:
             echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
 jobs:
-  init:
+  init-dev:
     context:
       - dev_cloud-dev
+    executor: node/default
+    steps:
+      - init-node
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  init-prod:
+    context:
       - main_cloud-dev
     executor: node/default
     steps:
@@ -91,7 +100,17 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - init
+      - init-dev:
+          filters:
+            branches:
+              only:
+                - dev
+      - init-prod:
+          filters:
+            branches:
+              only:
+                - main
+
       - build-node:
           requires:
             - init
