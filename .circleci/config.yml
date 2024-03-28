@@ -104,7 +104,7 @@ dev_flow: &dev_flow
     - test-node:
         requires:
           - build-node
-    - deploy--dev:
+    - deploy:
         requires:
           - test-node
 
