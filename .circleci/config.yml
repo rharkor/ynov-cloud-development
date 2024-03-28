@@ -16,6 +16,7 @@ jobs:
   build-node:
     executor: node/default
     steps:
+      - checkout
       - run:
           name: Build
           command: npm run build
@@ -24,6 +25,7 @@ jobs:
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
+      - checkout
       - run:
           name: Run tests
           command: npm run test:ci
