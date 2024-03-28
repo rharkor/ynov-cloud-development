@@ -21,8 +21,7 @@ commands:
 
 jobs:
   init-dev:
-    context:
-      - dev_cloud-dev
+    context: dev_cloud-dev
     executor: node/default
     steps:
       - init-node
@@ -31,8 +30,7 @@ jobs:
           paths:
             - .
   init-prod:
-    context:
-      - main_cloud-dev
+    context: main_cloud-dev
     executor: node/default
     steps:
       - init-node
