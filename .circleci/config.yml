@@ -91,12 +91,13 @@ jobs:
       - run:
           name: Pull Vercel Environment Information
           command: |
-            echo $VERCEL_PROJECT_ID | base64
-            echo "$(cat vercel.json)"
+            export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
+            export VERCEL_ORG_ID=$VERCEL_ORG_ID
+            export VERCEL_TOKEN=$VERCEL_TOKEN
             if [ $DEPLOY_ENV = "production" ]; then
-              sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+              vercel pull --yes --environment=production --token=$VERCEL_TOKEN
             else
-              sudo vercel pull --yes --environment=development --token=$VERCEL_TOKEN
+              vercel pull --yes --environment=development --token=$VERCEL_TOKEN
             fi
       - run:
           name: Build Project Artifacts
