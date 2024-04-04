@@ -143,9 +143,9 @@ dev_flow: &dev_flow
     # - test-node:
     #     requires:
     #       - build-node
-    - deploy:
-        # requires:
-        #   - test-node
+    - deploy
+      # requires:
+      #   - test-node
 
 prod_flow: &prod_flow
   jobs:
