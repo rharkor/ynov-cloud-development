@@ -30,5 +30,9 @@ export const TRPC_ERROR_CODES_BY_KEY = {
 } as const
 
 export const getUrl = () => {
-  return env.NEXT_PUBLIC_BASE_URL + "/api/trpc"
+  const vercelUrl = env.VERCEL_URL
+  const envUrl = env.NEXT_PUBLIC_BASE_URL
+
+  const url = vercelUrl || envUrl
+  return url + "/api/trpc"
 }
