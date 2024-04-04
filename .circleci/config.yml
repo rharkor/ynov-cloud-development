@@ -134,18 +134,18 @@ prod_only: &prod_only
 dev_flow: &dev_flow
   jobs:
     # TODO UNCOMMENT
-    # - init--dev:
-    #     <<: *dev_only
-    #     context: dev_cloud-dev
+    - init--dev:
+        <<: *dev_only
+        context: dev_cloud-dev
     # - build-node:
     #     requires:
     #       - init--dev
     # - test-node:
     #     requires:
     #       - build-node
-    - deploy
-      # requires:
-      #   - test-node
+    - deploy:
+        requires:
+          - init--dev
 
 prod_flow: &prod_flow
   jobs:
