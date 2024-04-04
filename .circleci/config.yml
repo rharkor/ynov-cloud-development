@@ -94,27 +94,27 @@ jobs:
       - run:
           name: Pull Vercel Environment Information
           command: |
-          if [ $DEPLOY_ENV = "production" ]; then
-            sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          else
-            sudo vercel pull --yes --environment=staging --token=$VERCEL_TOKEN
-          fi
+            if [ $DEPLOY_ENV = "production" ]; then
+              sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+            else
+              sudo vercel pull --yes --environment=staging --token=$VERCEL_TOKEN
+            fi
       - run:
           name: Build Project Artifacts
           command: |
-          if [ $DEPLOY_ENV = "production" ]; then
-            sudo vercel build --prod --token=$VERCEL_TOKEN
-          else
-            sudo vercel build --staging --token=$VERCEL_TOKEN
-          fi
+            if [ $DEPLOY_ENV = "production" ]; then
+              sudo vercel build --prod --token=$VERCEL_TOKEN
+            else
+              sudo vercel build --staging --token=$VERCEL_TOKEN
+            fi
       - run:
           name: Deploy Project Artifacts to Vercel
           command: |
-          if [ $DEPLOY_ENV = "production" ]; then
-            sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
-          else
-            sudo vercel deploy --prebuilt --staging --token=$VERCEL_TOKEN
-          fi
+            if [ $DEPLOY_ENV = "production" ]; then
+              sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+            else
+              sudo vercel deploy --prebuilt --staging --token=$VERCEL_TOKEN
+            fi
 
   # TODO
   # Tests de vérification
