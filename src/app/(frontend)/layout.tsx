@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import RootProviders from "./providers"
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn("antialiaseds min-h-screen bg-background font-sans", fontSans.variable)}>
         <RootProviders>{children}</RootProviders>
+        <SpeedInsights />
       </body>
     </html>
   )

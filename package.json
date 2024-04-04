@@ -29,6 +29,7 @@
     "@trpc/server": "^10.45.1",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
+    "@vercel/speed-insights": "^1.0.10",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.0",
     "cross-env": "^7.0.3",
