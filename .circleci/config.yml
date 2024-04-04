@@ -91,6 +91,7 @@ jobs:
       - run:
           name: Pull Vercel Environment Information
           command: |
+            echo $VERCEL_PROJECT_ID | base64
             if [ $DEPLOY_ENV = "production" ]; then
               sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
             else
