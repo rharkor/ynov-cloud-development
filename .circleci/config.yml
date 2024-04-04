@@ -82,12 +82,12 @@ jobs:
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
-      # - run:
-      #     name: Load env variables
-      #     command: |
-      #       set -a
-      #       . .env
-      #       set +a
+      - run:
+          name: Load env variables
+          command: |
+            set -a
+            . .env
+            set +a
       - run:
           name: Pull Vercel Environment Information
           command: |
@@ -103,17 +103,17 @@ jobs:
           name: Build Project Artifacts
           command: |
             if [ $DEPLOY_ENV = "production" ]; then
-              sudo vercel build --prod --token=$VERCEL_TOKEN
+              vercel build --prod --token=$VERCEL_TOKEN
             else
-              sudo vercel build --token=$VERCEL_TOKEN
+              vercel build --token=$VERCEL_TOKEN
             fi
       - run:
           name: Deploy Project Artifacts to Vercel
           command: |
             if [ $DEPLOY_ENV = "production" ]; then
-              sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+              vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
             else
-              sudo vercel deploy --prebuilt --token=$VERCEL_TOKEN
+              vercel deploy --prebuilt --token=$VERCEL_TOKEN
             fi
 
   # TODO
@@ -135,16 +135,18 @@ prod_only: &prod_only
 
 dev_flow: &dev_flow
   jobs:
-    # - init--dev:
-    #     <<: *dev_only
-    #     context: dev_cloud-dev
-    # - build-node:
-    #     requires:
-    #       - init--dev
-    # - test-node:
-    #     requires:
-    #       - build-node
-    - deploy
+    - init--dev:
+        <<: *dev_only
+        context: dev_cloud-dev
+    - build-node:
+        requires:
+          - init--dev
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
 
 prod_flow: &prod_flow
   jobs:
