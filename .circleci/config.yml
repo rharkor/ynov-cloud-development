@@ -88,7 +88,6 @@ jobs:
             set -a
             . .env
             set +a
-            echo $VERCEL_PROJECT_ID | base64
       - run:
           name: Pull Vercel Environment Information
           command: |
@@ -133,19 +132,18 @@ prod_only: &prod_only
 
 dev_flow: &dev_flow
   jobs:
-    # TODO UNCOMMENT
     - init--dev:
         <<: *dev_only
         context: dev_cloud-dev
-    # - build-node:
-    #     requires:
-    #       - init--dev
-    # - test-node:
-    #     requires:
-    #       - build-node
-    - deploy:
+    - build-node:
         requires:
           - init--dev
+    - test-node:
+        requires:
+          - build-node
+    - deploy:
+        requires:
+          - test-node
 
 prod_flow: &prod_flow
   jobs:
