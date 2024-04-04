@@ -82,18 +82,12 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
-          name: Load env variables
-          command: |
-            set -a
-            . .env
-            set +a
-      - run:
           name: Pull Vercel Environment Information
           command: |
+            set -a && source .env && set +a
             export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID
             export VERCEL_ORG_ID=$VERCEL_ORG_ID
             export VERCEL_TOKEN=$VERCEL_TOKEN
-            echo $DEPLOY_ENV | base64
             if [ $DEPLOY_ENV = "production" ]; then
               vercel pull --yes --environment=production --token=$VERCEL_TOKEN
             else
@@ -102,6 +96,7 @@ jobs:
       - run:
           name: Build Project Artifacts
           command: |
+            set -a && source .env && set +a
             if [ $DEPLOY_ENV = "production" ]; then
               vercel build --prod --token=$VERCEL_TOKEN
             else
@@ -110,6 +105,7 @@ jobs:
       - run:
           name: Deploy Project Artifacts to Vercel
           command: |
+            set -a && source .env && set +a
             if [ $DEPLOY_ENV = "production" ]; then
               vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
             else
