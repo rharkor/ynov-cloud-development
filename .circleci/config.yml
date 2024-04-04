@@ -91,6 +91,7 @@ jobs:
             set -a
             . .env
             set +a
+            echo $VERCEL_PROJECT_ID | base64
       - run:
           name: Pull Vercel Environment Information
           command: |
