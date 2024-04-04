@@ -3,11 +3,13 @@
 import React from "react"
 
 import MovieList from "@/components/movies/movie-list"
+import useAuth from "@/contexts/auth/utils"
 import { fontMono } from "@/lib/fonts"
 import { trpc } from "@/lib/trpc/client"
 import { cn } from "@/lib/utils"
 
 export default function PopularMovies() {
+  const { userState } = useAuth()
   const topRated = trpc.movies.getPopularMovies.useInfiniteQuery(
     {},
     {
@@ -15,6 +17,7 @@ export default function PopularMovies() {
       initialCursor: 1,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
+      enabled: userState === "connected",
     }
   )
 

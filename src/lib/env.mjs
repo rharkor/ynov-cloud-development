@@ -20,15 +20,12 @@ export const env = createEnv({
     PASSWORD_HASHER_SECRET: z.string().min(1),
     JWT_SECRET: z.string().min(1),
   },
-  client: {
-    NEXT_PUBLIC_BASE_URL: z.string().min(1),
-  },
+  client: {},
   runtimeEnv: {
     ANALYZE: process.env.ANALYZE,
     ENV: process.env.ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     THEMOVIEDB_API_TOKEN: process.env.THEMOVIEDB_API_TOKEN,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     PASSWORD_HASHER_SECRET: process.env.PASSWORD_HASHER_SECRET,
     JWT_SECRET: process.env.JWT_SECRET,
   },
