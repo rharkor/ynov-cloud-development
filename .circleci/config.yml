@@ -75,9 +75,6 @@ jobs:
       - store_test_results:
           path: ./test-results/
   deploy:
-    environment:
-      VERCEL_ORG_ID: $VERCEL_ORG_ID
-      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
     executor: node/default
     steps:
       - attach_workspace:
@@ -136,15 +133,16 @@ prod_only: &prod_only
 
 dev_flow: &dev_flow
   jobs:
-    - init--dev:
-        <<: *dev_only
-        context: dev_cloud-dev
-    - build-node:
-        requires:
-          - init--dev
-    - test-node:
-        requires:
-          - build-node
+    # TODO UNCOMMENT
+    # - init--dev:
+    #     <<: *dev_only
+    #     context: dev_cloud-dev
+    # - build-node:
+    #     requires:
+    #       - init--dev
+    # - test-node:
+    #     requires:
+    #       - build-node
     - deploy:
         requires:
           - test-node
