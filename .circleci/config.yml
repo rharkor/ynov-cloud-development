@@ -144,7 +144,7 @@ dev_flow: &dev_flow
     #       - init--dev
     # - test-node:
     #     requires:
-          - build-node
+    #       - build-node
     - deploy:
         requires:
           - init--dev
