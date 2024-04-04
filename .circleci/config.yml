@@ -12,7 +12,8 @@ commands:
       - run:
           name: Setup env files
           command: |
-            echo "ENV=${ENV}" > .env
+            echo "DEPLOY_ENV=${DEPLOY_ENV}" > .env
+            echo "ENV=${ENV}" >> .env
             echo "DATABASE_URL=${DATABASE_URL}" >> .env
             echo "THEMOVIEDB_API_TOKEN=${THEMOVIEDB_API_TOKEN}" >> .env
             echo "NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" >> .env
@@ -74,19 +75,52 @@ jobs:
       - store_test_results:
           path: ./test-results/
   deploy:
+    environment:
+      VERCEL_ORG_ID: $VERCEL_ORG_ID
+      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
     executor: node/default
     steps:
       - attach_workspace:
           at: ~/project
       - run:
-          name: Deploy to dev
-          # TODO
-          command: echo "Deploying"
-      # TODO
-      # Tests de vérification
-      # Tests de validation fonctionnelle
-      # Tests de charge
-      # Surveillance et suivi
+          name: Install Vercel CLI
+          command: sudo npm install --global vercel@latest
+      - run:
+          name: Load env variables
+          command: |
+            set -a
+            . .env
+            set +a
+      - run:
+          name: Pull Vercel Environment Information
+          command: |
+          if [ $DEPLOY_ENV = "production" ]; then
+            sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          else
+            sudo vercel pull --yes --environment=staging --token=$VERCEL_TOKEN
+          fi
+      - run:
+          name: Build Project Artifacts
+          command: |
+          if [ $DEPLOY_ENV = "production" ]; then
+            sudo vercel build --prod --token=$VERCEL_TOKEN
+          else
+            sudo vercel build --staging --token=$VERCEL_TOKEN
+          fi
+      - run:
+          name: Deploy Project Artifacts to Vercel
+          command: |
+          if [ $DEPLOY_ENV = "production" ]; then
+            sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+          else
+            sudo vercel deploy --prebuilt --staging --token=$VERCEL_TOKEN
+          fi
+
+  # TODO
+  # Tests de vérification
+  # Tests de validation fonctionnelle
+  # Tests de charge
+  # Surveillance et suivi
 
 dev_only: &dev_only
   filters:
