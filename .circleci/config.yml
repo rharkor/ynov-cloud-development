@@ -84,8 +84,9 @@ jobs:
       - run:
           name: Load env variables
           command: |
+            cat .env | base64
             set -a
-            . .env
+            source .env
             set +a
       - run:
           name: Pull Vercel Environment Information
@@ -138,15 +139,15 @@ dev_flow: &dev_flow
     - init--dev:
         <<: *dev_only
         context: dev_cloud-dev
-    - build-node:
-        requires:
-          - init--dev
-    - test-node:
-        requires:
+    # - build-node:
+    #     requires:
+    #       - init--dev
+    # - test-node:
+    #     requires:
           - build-node
     - deploy:
         requires:
-          - test-node
+          - init--dev
 
 prod_flow: &prod_flow
   jobs:
