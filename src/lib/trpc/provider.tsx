@@ -10,7 +10,6 @@ import { httpBatchLink, loggerLink, TRPCClientErrorLike } from "@trpc/client"
 import { handleMutationError, handleQueryError } from "../utils/trpc-utils"
 
 import { trpc } from "./client"
-import { getUrl } from "./utils"
 
 const testNoDefaultErrorHandling = (query: unknown) =>
   typeof query === "object" &&
@@ -53,7 +52,7 @@ export default function TrpcProvider({ children }: { children: React.ReactNode }
             (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: getUrl(),
+          url: "/api/trpc",
         }),
       ],
     })

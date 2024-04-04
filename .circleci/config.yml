@@ -16,7 +16,6 @@ commands:
             echo "ENV=${ENV}" >> .env
             echo "DATABASE_URL=${DATABASE_URL}" >> .env
             echo "THEMOVIEDB_API_TOKEN=${THEMOVIEDB_API_TOKEN}" >> .env
-            echo "NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}" >> .env
             echo "PASSWORD_HASHER_SECRET=${PASSWORD_HASHER_SECRET}" >> .env
             echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
