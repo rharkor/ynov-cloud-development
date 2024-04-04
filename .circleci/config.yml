@@ -92,6 +92,7 @@ jobs:
           name: Pull Vercel Environment Information
           command: |
             echo $VERCEL_PROJECT_ID | base64
+            echo "$(cat vercel.json)"
             if [ $DEPLOY_ENV = "production" ]; then
               sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
             else
@@ -133,18 +134,16 @@ prod_only: &prod_only
 
 dev_flow: &dev_flow
   jobs:
-    - init--dev:
-        <<: *dev_only
-        context: dev_cloud-dev
-    - build-node:
-        requires:
-          - init--dev
-    - test-node:
-        requires:
-          - build-node
-    - deploy:
-        requires:
-          - test-node
+    # - init--dev:
+    #     <<: *dev_only
+    #     context: dev_cloud-dev
+    # - build-node:
+    #     requires:
+    #       - init--dev
+    # - test-node:
+    #     requires:
+    #       - build-node
+    - deploy
 
 prod_flow: &prod_flow
   jobs:
