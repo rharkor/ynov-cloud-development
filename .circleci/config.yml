@@ -82,12 +82,12 @@ jobs:
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
-      - run:
-          name: Load env variables
-          command: |
-            set -a
-            . .env
-            set +a
+      # - run:
+      #     name: Load env variables
+      #     command: |
+      #       set -a
+      #       . .env
+      #       set +a
       - run:
           name: Pull Vercel Environment Information
           command: |
