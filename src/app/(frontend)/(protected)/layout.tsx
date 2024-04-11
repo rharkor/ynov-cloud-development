@@ -8,17 +8,15 @@ import { authRoutes } from "@/lib/constants"
 import ClientProtect from "./client-protect"
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  try {
-    const cookiesStore = cookies()
-    const token = cookiesStore.get("token")
-    if (!token || !token.value) {
-      redirect(authRoutes.redirectOnUnhauthorized, RedirectType.push)
-    }
-    const valid = await verifyToken(token.value)
-    if (!valid) {
-      redirect(authRoutes.redirectOnUnhauthorized, RedirectType.push)
-    }
-  } catch (e) {}
+  const cookiesStore = cookies()
+  const token = cookiesStore.get("token")
+  if (!token || !token.value) {
+    redirect(authRoutes.redirectOnUnhauthorized, RedirectType.replace)
+  }
+  const valid = await verifyToken(token.value)
+  if (!valid) {
+    redirect(authRoutes.redirectOnUnhauthorized, RedirectType.replace)
+  }
 
   return (
     <div className="flex h-screen flex-col">
