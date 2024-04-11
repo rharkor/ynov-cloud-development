@@ -36,3 +36,4 @@ npm run dev
 - Prisma (ORM)
 - MongoDB (Database)
 - T3 env (Environment variables validation)
+- Circle CI
