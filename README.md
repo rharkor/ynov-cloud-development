@@ -37,3 +37,9 @@ npm run dev
 - MongoDB (Database)
 - T3 env (Environment variables validation)
 - Circle CI
+
+## Easter egg
+
+Find it by yourself 🥚
+
+_Hint: Don't know what to watch?_
